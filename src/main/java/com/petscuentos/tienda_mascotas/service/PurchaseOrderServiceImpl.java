@@ -1,7 +1,9 @@
 package com.petscuentos.tienda_mascotas.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.petscuentos.tienda_mascotas.model.PurchaseOrder;
@@ -9,8 +11,9 @@ import com.petscuentos.tienda_mascotas.repository.PurchaseOrderRepository;
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService{
+@Autowired
 
- private final PurchaseOrderRepository purchaseOrderRepository = new PurchaseOrderRepository();
+ private  PurchaseOrderRepository purchaseOrderRepository;
 
     @Override
     public List<PurchaseOrder> getAllPurchaseOrders(){
@@ -18,22 +21,24 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     }
 
     @Override
-    public void createPurchaseOrder(PurchaseOrder purchaseOrder) {
-        purchaseOrderRepository.addPurchaseOrder(purchaseOrder);
+    public PurchaseOrder createPurchaseOrder(PurchaseOrder purchaseOrder) {
+      return  purchaseOrderRepository.save(purchaseOrder);
     }
     
     @Override
-    public PurchaseOrder getPurchaseOrderById(int id) {
-        return purchaseOrderRepository.findPurchaseOrderById(id);
+    public Optional<PurchaseOrder>  getPurchaseOrderById(Integer id) {
+        return purchaseOrderRepository.findById(id);
     }
 
     @Override
-    public void updatePurchaseOrder(int id, PurchaseOrder purchaseOrder) {
-        purchaseOrderRepository.updatePurchaseOrder( id,purchaseOrder );
-    }
+    public PurchaseOrder updatePurchaseOrder(Integer id, PurchaseOrder purchaseOrder) {
+        if(purchaseOrderRepository.existsById(id)){
+            purchaseOrder.setId(id);
+            return purchaseOrderRepository.save(purchaseOrder);
+        }else{return null; }    }
 
     @Override
-    public void deletePurchaseOrder(int id) {
-        purchaseOrderRepository.deletePurchaseOrder(id);
+    public void deletePurchaseOrder(Integer id) {
+        purchaseOrderRepository.deleteById(id);
     }
 }
