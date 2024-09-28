@@ -10,6 +10,7 @@ public interface CustomerService {
   List<Customer> getAllCustomers();
     Customer createCustomer(Customer customer);
     Optional<Customer>  getCustomerById(Integer id);
+    Customer findCustomerByFirstName(String firstName);
     Customer updateCustomer(Integer id, Customer customer);
     void deleteCustomer(Integer id);
 }
